@@ -19,24 +19,32 @@ class Form extends React.Component {
 
   render() {
     return (
-      <form>
+      <form className="mt-5 mb-5">
         <div class="form-group">
-          <label>Select Candidate</label>
-          <select
-            value={this.state.value}
-            onChange={this.handleChange}
-            class="form-control"
-          >
-            <option selected value={0}>
-              None
-            </option>
-            {this.props.candidates.map((candidate) => {
-              return <option value={candidate.id}>{candidate.name}</option>;
-            })}
-          </select>
+          <div className="container">
+            <div className="row">
+              <div className="col-4">
+                <h4 className="text-left">Select Candidate :</h4>
+              </div>
+              <div className="col-8">
+                <select
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  class="form-control"
+                >
+                  <option selected value={0}>
+                    None
+                  </option>
+                  {this.props.candidates.map((candidate) => {
+                    return (
+                      <option value={candidate.id}>{candidate.name}</option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <hr />
       </form>
     );
   }

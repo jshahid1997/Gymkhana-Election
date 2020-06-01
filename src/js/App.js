@@ -27,6 +27,7 @@ class App extends React.Component {
     };
 
     if (typeof web3 != "undefined") {
+      console.log(web3);
       this.web3Provider = web3.currentProvider;
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
@@ -140,7 +141,7 @@ class App extends React.Component {
             <div className="container">
               <div class="row">
                 <div class="col-lg-12 text-center">
-                  <h1>Election</h1>
+                  <h1 className="mt-4">Election</h1>
                   <br />
                   {this.state.loading || this.state.voting ? (
                     <p class="text-center">Loading...</p>

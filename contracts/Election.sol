@@ -19,7 +19,8 @@ contract Election {
     uint256 public candidatesCount;
 
     // voted event
-    event votedEvent(uint256[] indexed _candidateId);
+
+    event votedEvent(uint256[] _candidateId);
 
     constructor() public {
         addCandidate("A", "VP");

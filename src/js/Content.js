@@ -25,9 +25,8 @@ class Content extends React.Component {
   };
   render() {
     return (
-      <div>
-        <Table candidates={this.props.VP} />
-        <hr />
+      <div className="mb-9">
+        <Table candidates={this.props.VP} post="VP" />
         {!this.props.hasVoted ? (
           <Form
             candidates={this.props.VP}
@@ -36,8 +35,7 @@ class Content extends React.Component {
             }}
           />
         ) : null}
-        <Table candidates={this.props.GS} />
-        <hr />
+        <Table candidates={this.props.GS} post="GS" />
         {!this.props.hasVoted ? (
           <Form
             candidates={this.props.GS}
@@ -46,8 +44,7 @@ class Content extends React.Component {
             }}
           />
         ) : null}
-        <Table candidates={this.props.CS} />
-        <hr />
+        <Table candidates={this.props.CS} post="CS" />
         {!this.props.hasVoted ? (
           <Form
             candidates={this.props.CS}
@@ -56,8 +53,7 @@ class Content extends React.Component {
             }}
           />
         ) : null}
-        <Table candidates={this.props.SS} />
-        <hr />
+        <Table candidates={this.props.SS} post="SS" />
         {!this.props.hasVoted ? (
           <Form
             candidates={this.props.SS}
@@ -66,10 +62,10 @@ class Content extends React.Component {
             }}
           />
         ) : null}
-        <button onClick={this.handleClick} class="btn btn-primary">
+        <button onClick={this.handleClick} class="btn btn-primary m-7">
           Vote
         </button>
-        <p>Your account: {this.props.account}</p>
+        {/* <p>Your account: {this.props.account}</p> */}
       </div>
     );
   }

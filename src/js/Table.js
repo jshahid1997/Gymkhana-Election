@@ -1,28 +1,33 @@
 import React from "react";
+import { Card, CardHeader, CardBody } from "reactstrap";
 
 class Table extends React.Component {
   render() {
     return (
-      <table class="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Votes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.props.candidates.map((candidate) => {
-            return (
-              <tr>
-                <th>{candidate.id.toNumber()}</th>
-                <td>{candidate.name}</td>
-                <td>{candidate.voteCount.toNumber()}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <Card className="mt-3 mb-3">
+        <CardHeader>
+          <div className="container">
+            <div className="row">
+              <div className="col-4">Name</div>
+              <div className="col-4">Post</div>
+              <div className="col-4">Votes</div>
+            </div>
+          </div>
+        </CardHeader>
+        {this.props.candidates.map((candidate) => {
+          return (
+            <CardBody>
+              <div className="container">
+                <div className="row">
+                  <div className="col-4">{candidate.name}</div>
+                  <div className="col-4">{this.props.post}</div>
+                  <div className="col-4">{candidate.voteCount.toNumber()}</div>
+                </div>
+              </div>
+            </CardBody>
+          );
+        })}
+      </Card>
     );
   }
 }
