@@ -26,9 +26,13 @@ class App extends React.Component {
       voting: false,
     };
 
-    if (typeof web3 != "undefined") {
-      console.log(web3);
-      this.web3Provider = web3.currentProvider;
+    ethereum.enable();
+
+    if (typeof window.ethereum !== "undefined") {
+      // Ethereum user detected. You can now use the provider.
+      this.web3Provider = window["ethereum"];
+      console.log(ethereum.selectedAddress);
+      console.log(ethereum.isMetaMask);
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
         "http://localhost:7545"

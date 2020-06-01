@@ -21,7 +21,7 @@ class Table extends React.Component {
                 <div className="row">
                   <div className="col-4">{candidate.name}</div>
                   <div className="col-4">{this.props.post}</div>
-                  <div className="col-4">{candidate.voteCount.toNumber()}</div>
+                  <div className="col-4">{candidate.voteCount.toString()}</div>
                 </div>
               </div>
             </CardBody>
