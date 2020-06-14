@@ -1,4 +1,5 @@
 import React, { Component, Fragment, useState } from "react";
+import { connect } from "react-redux";
 
 // import "@fortawesome/fontawesome-free/css";
 import EditCandidates from "./EditCandidates";
@@ -68,4 +69,12 @@ class EditDetails extends Component {
 }
 
 //   // <h1>Hi</h1>
-export default EditDetails;
+const mapStateToProps = (state) => {
+  return {
+    VP: state.VP.VP,
+    GS: state.GS.GS,
+    CS: state.CS.CS,
+    SS: state.SS.SS,
+  };
+};
+export default connect(mapStateToProps)(EditDetails);

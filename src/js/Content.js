@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "./Table";
 import Form from "./Form";
+import { connect } from "react-redux";
 
 class Content extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Content extends React.Component {
     this.props.castVote(ids);
   };
   render() {
+    console.log(this.props.VP);
     return (
       <div className="mb-9">
         <Table candidates={this.props.VP} post="VP" />
@@ -62,13 +64,23 @@ class Content extends React.Component {
             }}
           />
         ) : null}
-        <button onClick={this.handleClick} class="btn btn-primary m-7">
-          Vote
-        </button>
+        {!this.props.hasVoted ? (
+          <button onClick={this.handleClick} class="btn btn-primary m-7">
+            Vote
+          </button>
+        ) : null}
         {/* <p>Your account: {this.props.account}</p> */}
       </div>
     );
   }
 }
 
-export default Content;
+const mapStateToProps = (state) => {
+  return {
+    VP: state.VP.VP,
+    GS: state.GS.GS,
+    CS: state.CS.CS,
+    SS: state.SS.SS,
+  };
+};
+export default connect(mapStateToProps)(Content);

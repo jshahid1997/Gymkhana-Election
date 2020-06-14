@@ -1,7 +1,6 @@
 import React from "react";
 import "@fortawesome/fontawesome-free/js/all";
 
-import ReactDOM from "react-dom";
 import Web3 from "web3";
 import TruffleContract from "truffle-contract";
 import Election from "../../build/contracts/Election.json";
@@ -12,15 +11,14 @@ import MyNav from "./MyNav";
 import { HashRouter as BrowserRouter, Switch } from "react-router-dom";
 import EditDetails from "./EditDetails";
 
+import { connect } from "react-redux";
+import { addVP, addGS, addCS, addSS } from "../redux/ActionCreators";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       account: "0x0",
-      VP: [],
-      GS: [],
-      CS: [],
-      SS: [],
       hasVoted: false,
       loading: true,
       voting: false,
@@ -63,38 +61,34 @@ class App extends React.Component {
             // console.log("test");
             this.electionInstance.candidates(i).then((candidate) => {
               if (candidate[3] === "VP") {
-                const VP = [...this.state.VP];
-
-                VP.push({
+                const VP = {
                   id: candidate[0],
                   name: candidate[1],
                   voteCount: candidate[2],
-                });
-                this.setState({ VP: VP });
+                };
+                this.props.addVP(VP);
+                console.log(this.props.VP);
               } else if (candidate[3] === "GS") {
-                const GS = [...this.state.GS];
-                GS.push({
+                const GS = {
                   id: candidate[0],
                   name: candidate[1],
                   voteCount: candidate[2],
-                });
-                this.setState({ GS: GS });
+                };
+                this.props.addGS(GS);
               } else if (candidate[3] === "CS") {
-                const CS = [...this.state.CS];
-                CS.push({
+                const CS = {
                   id: candidate[0],
                   name: candidate[1],
                   voteCount: candidate[2],
-                });
-                this.setState({ CS: CS });
+                };
+                this.props.addCS(CS);
               } else {
-                const SS = [...this.state.SS];
-                SS.push({
+                const SS = {
                   id: candidate[0],
                   name: candidate[1],
                   voteCount: candidate[2],
-                });
-                this.setState({ SS: SS });
+                };
+                this.props.addSS(SS);
               }
             });
           }
@@ -152,10 +146,6 @@ class App extends React.Component {
                   ) : (
                     <Content
                       account={this.state.account}
-                      VP={this.state.VP}
-                      GS={this.state.GS}
-                      CS={this.state.CS}
-                      SS={this.state.SS}
                       hasVoted={this.state.hasVoted}
                       castVote={this.castVote}
                     />
@@ -169,10 +159,6 @@ class App extends React.Component {
             <EditDetails
               web3={this.web3}
               eth={this.electionInstance}
-              VP={this.state.VP}
-              GS={this.state.GS}
-              CS={this.state.CS}
-              SS={this.state.SS}
               account={this.state.account}
             />
           </BrowserRouter>
@@ -182,9 +168,20 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.querySelector("#root")
-);
+const mapStateToProps = (state) => {
+  return {
+    VP: state.VP,
+    GS: state.GS,
+    CS: state.CS,
+    SS: state.SS,
+  };
+};
+
+const mapActionToProps = {
+  addVP,
+  addGS,
+  addCS,
+  addSS,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(App);

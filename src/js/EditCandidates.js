@@ -110,7 +110,7 @@ const EditCandidates = (props) => {
           >
             Add Candidate
           </Button>{" "}
-          <Button color="secondary" onClick={() => props.toggle("")}>
+          <Button color="secondary" onClick={() => props.toggle()}>
             Cancel
           </Button>
         </ModalFooter>
