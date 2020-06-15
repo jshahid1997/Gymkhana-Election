@@ -62,31 +62,31 @@ class App extends React.Component {
             this.electionInstance.candidates(i).then((candidate) => {
               if (candidate[3] === "VP") {
                 const VP = {
-                  id: candidate[0],
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
+                  voteCount: candidate[2].toNumber(),
                 };
                 this.props.addVP(VP);
                 console.log(this.props.VP);
               } else if (candidate[3] === "GS") {
                 const GS = {
-                  id: candidate[0],
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
+                  voteCount: candidate[2].toNumber(),
                 };
                 this.props.addGS(GS);
               } else if (candidate[3] === "CS") {
                 const CS = {
-                  id: candidate[0],
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
+                  voteCount: candidate[2].toNumber(),
                 };
                 this.props.addCS(CS);
               } else {
                 const SS = {
-                  id: candidate[0],
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
+                  voteCount: candidate[2].toNumber(),
                 };
                 this.props.addSS(SS);
               }

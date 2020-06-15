@@ -16,7 +16,14 @@ export const GS = (
         errMess: null,
         GS: [...state.GS, action.payload],
       };
-
+    case ActionTypes.DELETE_GS:
+      const curr = state.GS.filter((val, ind, arr) => val != action.payload);
+      return {
+        ...state,
+        isLoading: false,
+        errMess: null,
+        GS: curr,
+      };
     case ActionTypes.GS_LOADING:
       return { ...state, isLoading: true, errMess: null, GS: [] };
 

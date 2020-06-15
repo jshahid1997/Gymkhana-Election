@@ -13,7 +13,7 @@ const Candidates = (props) => {
                 <Button
                   outline
                   color="secondary"
-                  onClick={() => props.handleClick(candidate.name, props.post)}
+                  onClick={() => props.handleClick(candidate, props.post)}
                   id="delete"
                 >
                   <i className="fas fa-times-circle fa-lg"></i>

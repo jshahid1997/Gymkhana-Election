@@ -3,24 +3,20 @@ import Table from "./Table";
 import Form from "./Form";
 import { connect } from "react-redux";
 
+import { voteCS, voteGS, voteSS, voteVP } from "../redux/ActionCreators";
+
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      VP: 0,
-      GS: 0,
-      CS: 0,
-      SS: 0,
-    };
   }
 
   handleClick = (event) => {
     event.preventDefault();
     const ids = [];
-    this.state.VP == 0 ? null : ids.push(this.state.VP);
-    this.state.GS == 0 ? null : ids.push(this.state.GS);
-    this.state.CS == 0 ? null : ids.push(this.state.CS);
-    this.state.SS == 0 ? null : ids.push(this.state.SS);
+    this.props.votes.VP == 0 ? null : ids.push(this.props.votes.VP);
+    this.props.votes.GS == 0 ? null : ids.push(this.props.votes.GS);
+    this.props.votes.CS == 0 ? null : ids.push(this.props.votes.CS);
+    this.props.votes.SS == 0 ? null : ids.push(this.props.votes.SS);
     console.log(ids);
     this.props.castVote(ids);
   };
@@ -33,7 +29,7 @@ class Content extends React.Component {
           <Form
             candidates={this.props.VP}
             addId={(id) => {
-              this.setState({ ...this.state, VP: id });
+              this.props.voteVP(id);
             }}
           />
         ) : null}
@@ -42,7 +38,7 @@ class Content extends React.Component {
           <Form
             candidates={this.props.GS}
             addId={(id) => {
-              this.setState({ ...this.state, GS: id });
+              this.props.voteGS(id);
             }}
           />
         ) : null}
@@ -51,7 +47,7 @@ class Content extends React.Component {
           <Form
             candidates={this.props.CS}
             addId={(id) => {
-              this.setState({ ...this.state, CS: id });
+              this.props.voteCS(id);
             }}
           />
         ) : null}
@@ -60,7 +56,7 @@ class Content extends React.Component {
           <Form
             candidates={this.props.SS}
             addId={(id) => {
-              this.setState({ ...this.state, SS: id });
+              this.props.voteSS(id);
             }}
           />
         ) : null}
@@ -75,12 +71,15 @@ class Content extends React.Component {
   }
 }
 
+const mapActionsToProps = { voteCS, voteGS, voteSS, voteVP };
+
 const mapStateToProps = (state) => {
   return {
     VP: state.VP.VP,
     GS: state.GS.GS,
     CS: state.CS.CS,
     SS: state.SS.SS,
+    votes: state.Votes.votes,
   };
 };
-export default connect(mapStateToProps)(Content);
+export default connect(mapStateToProps, mapActionsToProps)(Content);

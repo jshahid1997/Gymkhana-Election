@@ -16,6 +16,14 @@ export const VP = (
         errMess: null,
         VP: [...state.VP, action.payload],
       };
+    case ActionTypes.DELETE_VP:
+      const curr = state.VP.filter((val, ind, arr) => val != action.payload);
+      return {
+        ...state,
+        isLoading: false,
+        errMess: null,
+        VP: curr,
+      };
 
     case ActionTypes.VP_LOADING:
       return { ...state, isLoading: true, errMess: null, VP: [] };

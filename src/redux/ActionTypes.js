@@ -3,6 +3,11 @@ export const ADD_GS = "ADD_GS";
 export const ADD_CS = "ADD_CS";
 export const ADD_SS = "ADD_SS";
 
+export const VOTE_VP = "VOTE_VP";
+export const VOTE_GS = "VOTE_GS";
+export const VOTE_CS = "VOTE_CS";
+export const VOTE_SS = "VOTE_SS";
+
 export const VP_LOADING = "VP_LOADING";
 export const GS_LOADING = "GS_LOADING";
 export const CS_LOADING = "CS_LOADING";

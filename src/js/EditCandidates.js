@@ -14,6 +14,9 @@ import {
   Col,
   Row,
 } from "reactstrap";
+
+import { connect } from "react-redux";
+
 const EditCandidates = (props) => {
   // console.log(props.props);
   return (
@@ -21,7 +24,7 @@ const EditCandidates = (props) => {
       <h1>Edit Candidates</h1>
       <h2>VP</h2>
       <Candidates
-        candidates={props.props.VP}
+        candidates={props.VP}
         handleClick={props.handleClick}
         post={"VP"}
         isOpen={props.isOpen}
@@ -36,7 +39,7 @@ const EditCandidates = (props) => {
       </Card>
       <h2>GS</h2>
       <Candidates
-        candidates={props.props.GS}
+        candidates={props.GS}
         handleClick={props.handleClick}
         post={"GS"}
         isOpen={props.isOpen}
@@ -51,7 +54,7 @@ const EditCandidates = (props) => {
       </Card>
       <h2>CS</h2>
       <Candidates
-        candidates={props.props.CS}
+        candidates={props.CS}
         handleClick={props.handleClick}
         post={"CS"}
         isOpen={props.isOpen}
@@ -66,7 +69,7 @@ const EditCandidates = (props) => {
       </Card>
       <h2>SS</h2>
       <Candidates
-        candidates={props.props.SS}
+        candidates={props.SS}
         handleClick={props.handleClick}
         post={"SS"}
         isOpen={props.isOpen}
@@ -119,4 +122,12 @@ const EditCandidates = (props) => {
   );
 };
 
-export default EditCandidates;
+const mapStateToProps = (state) => {
+  return {
+    VP: state.VP.VP,
+    GS: state.GS.GS,
+    CS: state.CS.CS,
+    SS: state.SS.SS,
+  };
+};
+export default connect(mapStateToProps)(EditCandidates);

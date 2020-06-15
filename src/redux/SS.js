@@ -16,7 +16,14 @@ export const SS = (
         errMess: null,
         SS: [...state.SS, action.payload],
       };
-
+    case ActionTypes.DELETE_SS:
+      const curr = state.SS.filter((val, ind, arr) => val != action.payload);
+      return {
+        ...state,
+        isLoading: false,
+        errMess: null,
+        SS: curr,
+      };
     case ActionTypes.SS_LOADING:
       return { ...state, isLoading: true, errMess: null, SS: [] };
 

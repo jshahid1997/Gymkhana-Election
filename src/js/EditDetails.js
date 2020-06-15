@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 
 // import "@fortawesome/fontawesome-free/css";
 import EditCandidates from "./EditCandidates";
+import { addCandidate, deleteCandidate } from "../redux/ActionCreators";
 
 class EditDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      account: "0x1b53a6e8d57a343de37c09833fec13f8a7fdc3b2",
+      account: "0xb28d00609a993f5b2ba66d8e081d7f4dee3298f5",
       isOpen: false,
       name: "",
       post: "",
@@ -20,8 +21,11 @@ class EditDetails extends Component {
   handleClick = (name, post) => {
     console.log(name, post);
     this.props.eth
-      .removeCandidate(name, post, { from: this.props.account })
-      .then((res) => console.log(res));
+      .removeCandidate(name.name, post, { from: this.props.account })
+      .then((res) => {
+        console.log(res);
+        this.props.deleteCandidate(post, name);
+      });
   };
   toggleModal = (post) => {
     this.setState({
@@ -36,11 +40,28 @@ class EditDetails extends Component {
   };
   addCandidate = (post) => {
     console.log(this.state.name, this.state.post);
+    post = this.state.post;
+    var name = this.state.name;
+    var count = 0;
+
     this.props.eth
       .addCandidate(this.state.name, this.state.post, {
         from: this.props.account,
       })
-      .then((res) => console.log(res));
+      .then((res) => {
+        console.log(res);
+        this.props.eth.candidatesCount().then((cnt) => {
+          count = cnt.toNumber();
+        });
+        console.log(count);
+
+        const CD = {
+          id: count,
+          name: name,
+          voteCount: 0,
+        };
+        this.props.addCandidate(post, CD);
+      });
   };
   render() {
     // console.log(this.props.account);
@@ -68,7 +89,11 @@ class EditDetails extends Component {
   }
 }
 
-//   // <h1>Hi</h1>
+const mapActionsToProps = {
+  addCandidate,
+  deleteCandidate,
+};
+
 const mapStateToProps = (state) => {
   return {
     VP: state.VP.VP,
@@ -77,4 +102,4 @@ const mapStateToProps = (state) => {
     SS: state.SS.SS,
   };
 };
-export default connect(mapStateToProps)(EditDetails);
+export default connect(mapStateToProps, mapActionsToProps)(EditDetails);
