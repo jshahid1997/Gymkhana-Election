@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, Component } from "react";
 import Candidates from "./Candidates";
 import {
   Card,
@@ -14,109 +14,181 @@ import {
   Col,
   Row,
 } from "reactstrap";
-const EditCandidates = (props) => {
-  // console.log(props.props);
-  return (
-    <Fragment>
-      <h1>Edit Candidates</h1>
-      <h2>VP</h2>
-      <Candidates
-        candidates={props.props.VP}
-        handleClick={props.handleClick}
-        post={"VP"}
-        isOpen={props.isOpen}
-        toggle={props.toggle}
-        onChange={props.onChange}
-        addCandidate={props.addCandidate}
-      />
-      <Card>
-        <Button className="text-center" onClick={() => props.toggle("VP")}>
-          Add Candidate
-        </Button>
-      </Card>
-      <h2>GS</h2>
-      <Candidates
-        candidates={props.props.GS}
-        handleClick={props.handleClick}
-        post={"GS"}
-        isOpen={props.isOpen}
-        toggle={props.toggle}
-        onChange={props.onChange}
-        addCandidate={props.addCandidate}
-      />
-      <Card>
-        <Button className="text-center" onClick={() => props.toggle("GS")}>
-          Add Candidate
-        </Button>
-      </Card>
-      <h2>CS</h2>
-      <Candidates
-        candidates={props.props.CS}
-        handleClick={props.handleClick}
-        post={"CS"}
-        isOpen={props.isOpen}
-        toggle={props.toggle}
-        onChange={props.onChange}
-        addCandidate={props.addCandidate}
-      />
-      <Card>
-        <Button className="text-center" onClick={() => props.toggle("CS")}>
-          Add Candidate
-        </Button>
-      </Card>
-      <h2>SS</h2>
-      <Candidates
-        candidates={props.props.SS}
-        handleClick={props.handleClick}
-        post={"SS"}
-        isOpen={props.isOpen}
-        toggle={props.toggle}
-        onChange={props.onChange}
-        addCandidate={props.addCandidate}
-      />
-      <Card>
-        <Button className="text-center" onClick={() => props.toggle("SS")}>
-          Add Candidate
-        </Button>
-      </Card>
-      <Modal isOpen={props.isOpen} toggle={() => props.toggle("")}>
-        <ModalHeader toggle={() => props.toggle("")}>
-          Add Candidates
-        </ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup row>
-              <Label sm={4}>Candidate name </Label>
 
-              <Col sm={8}>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Name"
-                  onChange={props.onChange}
-                />
-              </Col>
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
+import { addCandidate, deleteCandidate } from "../redux/ActionCreators";
+
+import { connect } from "react-redux";
+
+class EditCandidates extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      name: "",
+      post: "",
+    };
+    this.handleClick = this.handleClick.bind(this);
+    this.addCandidate = this.addCandidate.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  // console.log(props.props);
+  handleClick = (cd, post) => {
+    console.log(cd, post);
+    this.props.eth
+      .removeCandidate(cd.name, post, { from: this.props.account })
+      .then((res) => {
+        console.log(res);
+        this.props.deleteCandidate(post, cd);
+      });
+  };
+  toggleModal = (e) => {
+    this.setState({
+      isOpen: !this.state.isOpen,
+      post: e,
+    });
+  };
+  handleChange = (e) => {
+    this.setState({
+      name: e.target.value,
+    });
+  };
+  addCandidate = () => {
+    const { name, post } = this.state;
+    console.log(name, post);
+    var count = 0;
+
+    this.props.eth
+      .addCandidate(name, post, {
+        from: this.props.account,
+      })
+      .then((res) => {
+        console.log(res);
+        this.props.eth.candidatesCount().then((cnt) => {
+          count = cnt.toNumber();
+        });
+        console.log(count);
+
+        const CD = {
+          id: count,
+          name: name,
+          voteCount: 0,
+        };
+        this.props.addCandidate(post, CD);
+      });
+  };
+  render() {
+    return (
+      <Fragment>
+        <h1>Edit Candidates</h1>
+        <h2>VP</h2>
+        <Candidates
+          candidates={this.props.VP}
+          handleClick={this.handleClick}
+          post={"VP"}
+        />
+        <Card>
           <Button
-            color="primary"
-            onClick={() => {
-              props.addCandidate();
-              props.toggle();
-            }}
+            className="text-center"
+            onClick={() => this.toggleModal("VP")}
           >
             Add Candidate
-          </Button>{" "}
-          <Button color="secondary" onClick={() => props.toggle("")}>
-            Cancel
           </Button>
-        </ModalFooter>
-      </Modal>
-    </Fragment>
-  );
+        </Card>
+        <h2>GS</h2>
+        <Candidates
+          candidates={this.props.GS}
+          handleClick={this.handleClick}
+          post={"GS"}
+        />
+        <Card>
+          <Button
+            className="text-center"
+            onClick={() => this.toggleModal("GS")}
+          >
+            Add Candidate
+          </Button>
+        </Card>
+        <h2>CS</h2>
+        <Candidates
+          candidates={this.props.CS}
+          handleClick={this.handleClick}
+          post={"CS"}
+        />
+        <Card>
+          <Button
+            className="text-center"
+            onClick={() => this.toggleModal("CS")}
+          >
+            Add Candidate
+          </Button>
+        </Card>
+        <h2>SS</h2>
+        <Candidates
+          candidates={this.props.SS}
+          handleClick={this.handleClick}
+          post={"SS"}
+        />
+        <Card>
+          <Button
+            className="text-center"
+            onClick={() => this.toggleModal("SS")}
+          >
+            Add Candidate
+          </Button>
+        </Card>
+        <Modal isOpen={this.state.isOpen} toggle={() => this.toggleModal("")}>
+          <ModalHeader toggle={() => this.toggleModal("")}>
+            Add Candidates
+          </ModalHeader>
+          <ModalBody>
+            <Form>
+              <FormGroup row>
+                <Label sm={4}>Candidate name </Label>
+
+                <Col sm={8}>
+                  <Input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Name"
+                    onChange={this.handleChange}
+                  />
+                </Col>
+              </FormGroup>
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              onClick={() => {
+                this.addCandidate();
+                this.toggleModal("");
+              }}
+            >
+              Add Candidate
+            </Button>{" "}
+            <Button color="secondary" onClick={() => this.toggleModal("")}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </Fragment>
+    );
+  }
+}
+const mapActionsToProps = {
+  addCandidate,
+  deleteCandidate,
 };
 
-export default EditCandidates;
+const mapStateToProps = (state) => {
+  return {
+    VP: state.VP.VP,
+    GS: state.GS.GS,
+    CS: state.CS.CS,
+    SS: state.SS.SS,
+    eth: state.ElectionInstance.instance,
+  };
+};
+export default connect(mapStateToProps, mapActionsToProps)(EditCandidates);

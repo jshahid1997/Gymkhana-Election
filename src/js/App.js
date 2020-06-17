@@ -1,7 +1,6 @@
 import React from "react";
 import "@fortawesome/fontawesome-free/js/all";
 
-import ReactDOM from "react-dom";
 import Web3 from "web3";
 import TruffleContract from "truffle-contract";
 import Election from "../../build/contracts/Election.json";
@@ -12,15 +11,20 @@ import MyNav from "./MyNav";
 import { HashRouter as BrowserRouter, Switch } from "react-router-dom";
 import EditDetails from "./EditDetails";
 
+import { connect } from "react-redux";
+import {
+  addVP,
+  addGS,
+  addCS,
+  addSS,
+  setInstance,
+} from "../redux/ActionCreators";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       account: "0x0",
-      VP: [],
-      GS: [],
-      CS: [],
-      SS: [],
       hasVoted: false,
       loading: true,
       voting: false,
@@ -31,8 +35,8 @@ class App extends React.Component {
     if (typeof window.ethereum !== "undefined") {
       // Ethereum user detected. You can now use the provider.
       this.web3Provider = window["ethereum"];
-      console.log(ethereum.selectedAddress);
-      console.log(ethereum.isMetaMask);
+      // console.log(ethereum.selectedAddress);
+      // console.log(ethereum.isMetaMask);
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
         "http://localhost:7545"
@@ -56,45 +60,41 @@ class App extends React.Component {
       this.election.deployed().then((electionInstance) => {
         this.electionInstance = electionInstance;
         this.watchEvents();
-
+        this.props.setInstance(this.electionInstance);
         this.electionInstance.candidatesCount().then((candidatesCount) => {
-          console.log(`Taz ${candidatesCount}`);
+          // console.log(`Taz ${candidatesCount}`);
           for (var i = 1; i <= candidatesCount; i++) {
             // console.log("test");
             this.electionInstance.candidates(i).then((candidate) => {
               if (candidate[3] === "VP") {
-                const VP = [...this.state.VP];
-
-                VP.push({
-                  id: candidate[0],
+                const VP = {
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
-                });
-                this.setState({ VP: VP });
+                  voteCount: candidate[2].toNumber(),
+                };
+                this.props.addVP(VP);
+                // console.log(this.props.VP);
               } else if (candidate[3] === "GS") {
-                const GS = [...this.state.GS];
-                GS.push({
-                  id: candidate[0],
+                const GS = {
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
-                });
-                this.setState({ GS: GS });
+                  voteCount: candidate[2].toNumber(),
+                };
+                this.props.addGS(GS);
               } else if (candidate[3] === "CS") {
-                const CS = [...this.state.CS];
-                CS.push({
-                  id: candidate[0],
+                const CS = {
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
-                });
-                this.setState({ CS: CS });
+                  voteCount: candidate[2].toNumber(),
+                };
+                this.props.addCS(CS);
               } else {
-                const SS = [...this.state.SS];
-                SS.push({
-                  id: candidate[0],
+                const SS = {
+                  id: candidate[0].toNumber(),
                   name: candidate[1],
-                  voteCount: candidate[2],
-                });
-                this.setState({ SS: SS });
+                  voteCount: candidate[2].toNumber(),
+                };
+                this.props.addSS(SS);
               }
             });
           }
@@ -127,14 +127,6 @@ class App extends React.Component {
       .vote(candidateIds, { from: this.state.account })
       .then((result) => this.setState({ hasVoted: true }));
   }
-  handleClick() {
-    console.log("Hi");
-    this.electionInstance
-      .addCandidate("Arindom", "VP", { from: this.state.account })
-      .then((res) => {
-        console.log(res);
-      });
-  }
 
   render() {
     return (
@@ -152,10 +144,6 @@ class App extends React.Component {
                   ) : (
                     <Content
                       account={this.state.account}
-                      VP={this.state.VP}
-                      GS={this.state.GS}
-                      CS={this.state.CS}
-                      SS={this.state.SS}
                       hasVoted={this.state.hasVoted}
                       castVote={this.castVote}
                     />
@@ -166,15 +154,7 @@ class App extends React.Component {
             </div>
           </BrowserRouter>
           <BrowserRouter exact path="/editDetails">
-            <EditDetails
-              web3={this.web3}
-              eth={this.electionInstance}
-              VP={this.state.VP}
-              GS={this.state.GS}
-              CS={this.state.CS}
-              SS={this.state.SS}
-              account={this.state.account}
-            />
+            <EditDetails account={this.state.account} />
           </BrowserRouter>
         </Switch>
       </div>
@@ -182,9 +162,22 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.querySelector("#root")
-);
+const mapStateToProps = (state) => {
+  return {
+    VP: state.VP,
+    GS: state.GS,
+    CS: state.CS,
+    SS: state.SS,
+    instance: state.ElectionInstance.instance,
+  };
+};
+
+const mapActionToProps = {
+  addVP,
+  addGS,
+  addCS,
+  addSS,
+  setInstance,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(App);
