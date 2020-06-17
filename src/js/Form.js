@@ -6,10 +6,6 @@ class Form extends React.Component {
     this.state = { value: 0 };
     this.handleChange = this.handleChange.bind(this);
   }
-  // componentWillReceiveProps() {
-  //   console.log(this.props.candidates);
-  //   // this.setState({ value: this.props.candidates[0].id.toNumber() });
-  // }
 
   handleChange(event) {
     this.setState({ value: event.target.value });

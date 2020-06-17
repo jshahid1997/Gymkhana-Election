@@ -12,7 +12,13 @@ import { HashRouter as BrowserRouter, Switch } from "react-router-dom";
 import EditDetails from "./EditDetails";
 
 import { connect } from "react-redux";
-import { addVP, addGS, addCS, addSS } from "../redux/ActionCreators";
+import {
+  addVP,
+  addGS,
+  addCS,
+  addSS,
+  setInstance,
+} from "../redux/ActionCreators";
 
 class App extends React.Component {
   constructor(props) {
@@ -29,8 +35,8 @@ class App extends React.Component {
     if (typeof window.ethereum !== "undefined") {
       // Ethereum user detected. You can now use the provider.
       this.web3Provider = window["ethereum"];
-      console.log(ethereum.selectedAddress);
-      console.log(ethereum.isMetaMask);
+      // console.log(ethereum.selectedAddress);
+      // console.log(ethereum.isMetaMask);
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
         "http://localhost:7545"
@@ -54,9 +60,9 @@ class App extends React.Component {
       this.election.deployed().then((electionInstance) => {
         this.electionInstance = electionInstance;
         this.watchEvents();
-
+        this.props.setInstance(this.electionInstance);
         this.electionInstance.candidatesCount().then((candidatesCount) => {
-          console.log(`Taz ${candidatesCount}`);
+          // console.log(`Taz ${candidatesCount}`);
           for (var i = 1; i <= candidatesCount; i++) {
             // console.log("test");
             this.electionInstance.candidates(i).then((candidate) => {
@@ -67,7 +73,7 @@ class App extends React.Component {
                   voteCount: candidate[2].toNumber(),
                 };
                 this.props.addVP(VP);
-                console.log(this.props.VP);
+                // console.log(this.props.VP);
               } else if (candidate[3] === "GS") {
                 const GS = {
                   id: candidate[0].toNumber(),
@@ -121,14 +127,6 @@ class App extends React.Component {
       .vote(candidateIds, { from: this.state.account })
       .then((result) => this.setState({ hasVoted: true }));
   }
-  handleClick() {
-    console.log("Hi");
-    this.electionInstance
-      .addCandidate("Arindom", "VP", { from: this.state.account })
-      .then((res) => {
-        console.log(res);
-      });
-  }
 
   render() {
     return (
@@ -156,11 +154,7 @@ class App extends React.Component {
             </div>
           </BrowserRouter>
           <BrowserRouter exact path="/editDetails">
-            <EditDetails
-              web3={this.web3}
-              eth={this.electionInstance}
-              account={this.state.account}
-            />
+            <EditDetails account={this.state.account} />
           </BrowserRouter>
         </Switch>
       </div>
@@ -174,6 +168,7 @@ const mapStateToProps = (state) => {
     GS: state.GS,
     CS: state.CS,
     SS: state.SS,
+    instance: state.ElectionInstance.instance,
   };
 };
 
@@ -182,6 +177,7 @@ const mapActionToProps = {
   addGS,
   addCS,
   addSS,
+  setInstance,
 };
 
 export default connect(mapStateToProps, mapActionToProps)(App);

@@ -22,3 +22,5 @@ export const DELETE_VP = "DELETE_VP";
 export const DELETE_GS = "DELETE_GS";
 export const DELETE_CS = "DELETE_CS";
 export const DELETE_SS = "DELETE_SS";
+
+export const SET_INSTANCE = "SET_INSTANCE";

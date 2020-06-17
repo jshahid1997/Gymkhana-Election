@@ -17,11 +17,10 @@ class Content extends React.Component {
     this.props.votes.GS == 0 ? null : ids.push(this.props.votes.GS);
     this.props.votes.CS == 0 ? null : ids.push(this.props.votes.CS);
     this.props.votes.SS == 0 ? null : ids.push(this.props.votes.SS);
-    console.log(ids);
+    // console.log(ids);
     this.props.castVote(ids);
   };
   render() {
-    console.log(this.props.VP);
     return (
       <div className="mb-9">
         <Table candidates={this.props.VP} post="VP" />

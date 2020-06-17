@@ -102,3 +102,10 @@ export const voteSS = (SS) => (dispatch) => {
     payload: SS,
   });
 };
+
+export const setInstance = (instance) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.SET_INSTANCE,
+    payload: instance,
+  });
+};
