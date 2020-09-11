@@ -19,6 +19,7 @@ import {
   addSS,
   setInstance,
 } from "../redux/ActionCreators";
+import Candidature from "./Candidature";
 
 class App extends React.Component {
   constructor(props) {
@@ -155,6 +156,9 @@ class App extends React.Component {
           </BrowserRouter>
           <BrowserRouter exact path="/editDetails">
             <EditDetails account={this.state.account} />
+          </BrowserRouter>
+          <BrowserRouter exact path="/request">
+            <Candidature account={this.state.account} />
           </BrowserRouter>
         </Switch>
       </div>
